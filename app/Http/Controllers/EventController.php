@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Model\Event;
+use App\Model\Organizer;
 use Illuminate\Http\Request;
 
 class EventController extends Controller
@@ -10,11 +11,12 @@ class EventController extends Controller
     /**
      * Display a listing of the resource.
      *
+     * @param Organizer $organizer
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Organizer $organizer)
     {
-        return Event::all();
+        return $organizer->events;
     }
 
     /**

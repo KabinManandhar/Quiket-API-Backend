@@ -2,21 +2,23 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\Organizer\OrganizerCollection;
 use App\Http\Resources\Organizer\OrganizerResource;
 use App\Model\Organizer;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class OrganizerController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @return Organizer[]|Collection
+     * @return AnonymousResourceCollection
      */
     public function index()
     {
-        return Organizer::all();
+        return OrganizerCollection::collection(Organizer::all());
     }
 
     /**

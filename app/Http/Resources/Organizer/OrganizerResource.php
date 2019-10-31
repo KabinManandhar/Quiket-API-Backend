@@ -24,7 +24,7 @@ class OrganizerResource extends JsonResource
               'email'=>$this->email,
               'password'=>$this->password,
               'phone_no'=>$this->phone_no,
-              'no_of_events'=>$this->events->sum('id')==0 ?'No events hosted yet.' : $this->events->sum('id'),
+              'no_of_events'=>$this->events->count('id')==0 ?'No events hosted yet.' : $this->events->count('id'),
               'href'=>route('events.index',$this->id)
           ];
     }
