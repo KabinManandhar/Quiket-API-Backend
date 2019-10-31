@@ -48,7 +48,6 @@ class OrganizerController extends Controller
      */
     public function show(Organizer $organizer)
     {
-        return dd($organizer);
         return new OrganizerResource($organizer);
     }
 

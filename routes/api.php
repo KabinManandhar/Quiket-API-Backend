@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,3 +19,9 @@ use Illuminate\Http\Request;
 //});
 
 Route::apiResource('/organizers','OrganizerController');
+Route::group(['prefix'=>'organizers'],function(){
+    Route::apiResource('/{organizer}/events','EventController');
+    Route::group(['prefix'=>'events'],function(){
+        Route::apiResource('/{event}/tickets','TicketController');
+    });
+});
