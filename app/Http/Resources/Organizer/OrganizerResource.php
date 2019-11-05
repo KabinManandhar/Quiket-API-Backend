@@ -16,6 +16,8 @@ class OrganizerResource extends JsonResource
     public function toArray($request)
     {
 //        return parent::toArray($request);
+
+        if($this->id>6){
           return [
               'id'=>$this->id,
               'name'=>$this->name,
@@ -26,6 +28,6 @@ class OrganizerResource extends JsonResource
               'phone_no'=>$this->phone_no,
               'no_of_events'=>$this->events->count('id')==0 ?'No events hosted yet.' : $this->events->count('id'),
               'href'=>route('events.index',$this->id)
-          ];
+          ];}
     }
 }
