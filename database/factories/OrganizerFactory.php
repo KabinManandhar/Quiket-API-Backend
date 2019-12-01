@@ -11,7 +11,7 @@ $factory->define(Organizer::class, function (Faker $faker) {
         'name'=> $faker->name,
         'description'=> $faker->sentence,
         'email'=> $faker->email,
-        'password'=> $faker->password,
+        'password'=> bcrypt("secret"),
         'picture'=> $faker->sentence,
         'phone_no'=> $faker->phoneNumber,
     ];

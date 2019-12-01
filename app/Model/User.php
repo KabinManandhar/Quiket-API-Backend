@@ -4,11 +4,11 @@ namespace App\Model;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Tymon\JWTAuth\Contracts\JWTSubject;
+use SMartins\PassportMultiauth\HasMultiAuthApiTokens;
 
-class User extends Authenticatable implements JWTSubject
+class User extends Authenticatable
 {
-    use Notifiable;
+    use Notifiable,HasMultiAuthApiTokens;
     /**
      * @var array
      */

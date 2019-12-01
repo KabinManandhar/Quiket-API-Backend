@@ -165,6 +165,8 @@ return [
         /*
          * Package Service Providers...
          */
+        SMartins\PassportMultiauth\Providers\MultiauthServiceProvider::class,
+        Laravel\Passport\PassportServiceProvider::class,
 
         /*
          * Application Service Providers...

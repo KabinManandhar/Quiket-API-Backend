@@ -1,5 +1,6 @@
 <?php
 
+use App\Model\Organizer;
 use App\Model\User;
 
 
@@ -45,10 +46,16 @@ return [
         ],
 
         'api' => [
-            'driver' => 'jwt',
+            'driver' => 'passport',
             'provider' => 'users',
             'hash' => false,
         ],
+        'organizer' => [
+            'driver' => 'passport',
+            'provider' => 'organizers',
+            'hash' => false,
+        ],
+
     ],
 
     /*
@@ -72,6 +79,10 @@ return [
         'users' => [
             'driver' => 'eloquent',
             'model' => User::class,
+        ],
+        'organizers' => [
+            'driver' => 'eloquent',
+            'model' => Organizer::class,
         ],
 
         // 'users' => [

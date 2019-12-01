@@ -16,13 +16,13 @@ use Illuminate\Support\Facades\Route;
 
 //Route::middleware('auth:api')->get('/user', function (Request $request) {
 //    return $request->user();
-//});
-
-Route::apiResource('/organizers','OrganizerController');
+//})
+Route::apiResource('/events','EventController');
+Route::apiResource('/users','UserController')->middleware("auth:api");
+Route::apiResource('/organizers','OrganizerController')->middleware("auth:organizer");
 Route::group(['prefix'=>'organizers'],function(){
     Route::apiResource('/{organizer}/events','EventController');
-
-    Route::group(['prefix'=>'events'],function(){
+    Route::group(['prefix'=>'eveents'],function(){
         Route::apiResource('/{event}/tickets','TicketController');
     });
 });

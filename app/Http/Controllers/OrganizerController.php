@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\OrganizerRequest;
 use App\Http\Resources\Organizer\OrganizerCollection;
 use App\Http\Resources\Organizer\OrganizerResource;
 use App\Model\Organizer;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
@@ -32,14 +32,11 @@ class OrganizerController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param OrganizerRequest $request
      */
-    public function store(Request $request)
+    public function store(OrganizerRequest $request)
     {
-        //
+        return $request;
     }
 
     /**
@@ -84,6 +81,7 @@ class OrganizerController extends Controller
      */
     public function destroy(Organizer $organizer)
     {
-        //
+        $this->destroy($organizer);
+        return response()->json('deleted');
     }
 }

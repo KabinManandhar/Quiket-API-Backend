@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\Event\EventCollection;
 use App\Model\Event;
 use App\Model\Organizer;
 use Illuminate\Http\Request;
@@ -16,7 +17,7 @@ class EventController extends Controller
      */
     public function index(Organizer $organizer)
     {
-        return $organizer->events;
+        return EventCollection::collection(Event::all());
     }
 
     /**
@@ -46,9 +47,9 @@ class EventController extends Controller
      * @param  \App\Model\Event  $event
      * @return \Illuminate\Http\Response
      */
-    public function show(Event $event)
+    public function show(Organizer $organizer)
     {
-        //
+        return $organizer->events;
     }
 
     /**

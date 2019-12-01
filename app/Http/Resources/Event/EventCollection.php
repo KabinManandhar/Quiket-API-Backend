@@ -2,9 +2,9 @@
 
 namespace App\Http\Resources\Event;
 
-use Illuminate\Http\Resources\Json\ResourceCollection;
+use Illuminate\Http\Resources\Json\Resource;
 
-class EventCollection extends ResourceCollection
+class EventCollection extends Resource
 {
     /**
      * Transform the resource collection into an array.
