@@ -8,6 +8,9 @@ use SMartins\PassportMultiauth\HasMultiAuthApiTokens;
 
 class Organizer extends Authenticatable
 {
+    protected $fillable=[
+      'name','description','picture','email','password','phone_no'
+    ];
     use HasMultiAuthApiTokens,Notifiable;
     public function events(){
         return $this->hasMany(Event::class);

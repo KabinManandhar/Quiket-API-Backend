@@ -85,7 +85,11 @@ class OrganizerController extends Controller
      */
     public function update(Request $request, Organizer $organizer)
     {
-        //
+//        return $request;
+        $organizer->update($request->all());
+        return response([
+            'data'=> new OrganizerResource($organizer)
+        ],201);
     }
 
     /**

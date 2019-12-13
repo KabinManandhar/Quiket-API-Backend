@@ -20,7 +20,7 @@ use Illuminate\Support\Facades\Route;
 //Route::apiResource('/events','EventController');
 Route::apiResource('/users','UserController')->middleware("auth:user");
 Route::apiResource('/organizers','OrganizerController')->middleware("auth:organizer");
-Route::group(['prefix'=>'organize;rs'],function(){
+Route::group(['prefix'=>'organizers'],function(){
     Route::apiResource('/{organizer}/events','EventController');
     Route::group(['prefix'=>'events'],function(){
         Route::apiResource('/{event}/tickets','TicketController');
