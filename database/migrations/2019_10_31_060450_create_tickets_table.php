@@ -21,7 +21,7 @@ class CreateTicketsTable extends Migration
             $table->integer('max_ticket_allowed_per_person');
             $table->integer('min_ticket_allowed_per_person');
             $table->string('ticket_type');
-            $table->string('promo_code');
+            $table->string('promo_code')->nullable();
             $table->boolean('status');
             $table->dateTime('start_date/time');
             $table->dateTime('end_date/time');

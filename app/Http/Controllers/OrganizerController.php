@@ -10,12 +10,18 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class OrganizerController extends Controller
+
 {
     /**
      * Display a listing of the resource.
      *
      * @return AnonymousResourceCollection
      */
+    public function __construct()
+    {
+        $this->middleware('auth:organizer')->except('index','show');
+    }
+
     public function index()
     {
         return OrganizerCollection::collection(Organizer::all());
@@ -36,7 +42,16 @@ class OrganizerController extends Controller
      */
     public function store(OrganizerRequest $request)
     {
-        return $request;
+        $organizer= new Organizer;
+        $organizer->name=$request->name;
+        $organizer->description=$request->description;
+        $organizer->email=$request->email;
+        $organizer->password=$request->password;
+        $organizer->phone_no=$request->phone_no;
+        $organizer->save();
+        return response([
+            'data'=> new OrganizerResource($organizer)
+        ],201);
     }
 
     /**

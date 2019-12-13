@@ -19,7 +19,6 @@ class OrganizerResource extends JsonResource
 
 //        if($this->id>6){
           return [
-              'id'=>$this->id,
               'name'=>$this->name,
               'description'=>$this->description,
               'picture'=>$this->picture,
@@ -27,7 +26,7 @@ class OrganizerResource extends JsonResource
               'password'=>$this->password,
               'phone_no'=>$this->phone_no,
               'no_of_events'=>$this->events->count('id')==0 ?'No events hosted yet.' : $this->events->count('id'),
-              'href'=>route('events.show',$this->id)
+              'href'=>route('events.index',$this->id)
           ];}
 //    }
 }

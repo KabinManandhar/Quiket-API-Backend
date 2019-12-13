@@ -16,8 +16,8 @@ class CreateOrganizersTable extends Migration
         Schema::create('organizers', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('name');
-            $table->string('description');
-            $table->string('picture');
+            $table->string('description')->nullable();
+            $table->string('picture')->nullable();
             $table->string('email');
             $table->string('password');
             $table->string('phone_no');

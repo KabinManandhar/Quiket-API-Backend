@@ -10,12 +10,9 @@ use Illuminate\Http\Request;
 class EventController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     *
-     * @param Organizer $organizer
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
      */
-    public function index(Organizer $organizer)
+    public function index()
     {
         return EventCollection::collection(Event::all());
     }
