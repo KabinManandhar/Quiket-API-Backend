@@ -8,6 +8,8 @@ use App\Http\Resources\Organizer\OrganizerResource;
 use App\Model\Organizer;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use App\Exceptions\UnathorizedException;
+use Illuminate\Support\Facades\Auth;
 
 class OrganizerController extends Controller
 
@@ -85,7 +87,7 @@ class OrganizerController extends Controller
      */
     public function update(Request $request, Organizer $organizer)
     {
-//        return $request;
+        $this->OrganizerChecker($organizer);
         $organizer->update([
             'name' => $request->name,
             'description' => $request->description,
@@ -108,8 +110,13 @@ class OrganizerController extends Controller
      */
     public function destroy(Organizer $organizer)
     {
+        $this->OrganizerChecker($organizer);
         $organizer->delete();
         return response()->json(['data'=>'deleted']);
     }
-
+    public function OrganizerChecker($organizer){
+        if (Auth::id() !== $organizer->id){
+            throw new UnathorizedException;
+        }
+    }
 }

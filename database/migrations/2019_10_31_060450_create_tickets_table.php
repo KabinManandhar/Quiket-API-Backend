@@ -23,6 +23,7 @@ class CreateTicketsTable extends Migration
             $table->string('ticket_type');
             $table->string('promo_code')->nullable();
             $table->boolean('status');
+            $table->boolean('refundable');
             $table->dateTime('start_date/time');
             $table->dateTime('end_date/time');
             $table->bigInteger('event_id')->unsigned()->index();

@@ -16,6 +16,7 @@ $factory->define(Ticket::class, function (Faker $faker) {
         'min_ticket_allowed_per_person'=>$faker->numberBetween(1,10),
         'ticket_type'=>$faker->word,
         'status'=>$faker->boolean,
+        'refundable'=>$faker->boolean,
         'promo_code'=>$faker->word,
         'start_date/time'=>$faker->dateTime,
         'end_date/time'=>$faker->dateTime,
