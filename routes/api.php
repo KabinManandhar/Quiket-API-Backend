@@ -26,5 +26,16 @@ Route::group(['prefix'=>'organizers'],function(){
         Route::apiResource('/{event}/tickets','TicketController');
     });
 });
-//Route::get('organizers','OrganizerController@index');
-//Route::get('organizers/{organizer}','OrganizerController@show');
+//For Organizer
+//Route::get('/organizers','OrganizerController@index');
+//Route::get('/organizers/{organizer}','OrganizerController@show');
+//Route::post('/organizers','OrganizerController@store');
+//Route::put('/organizers/{organizer}','OrganizerController@update');
+//Route::delete('/organizers/{organizer}','OrganizerController@update');
+
+//For User
+//Route::get('/users','userController@index');
+//Route::get('/users/{user}','UserController@show');
+//Route::post('/users','UserController@store');
+//Route::put('/users/{user}','UserController@update');
+//Route::delete('/users/{user}','UserController@update');

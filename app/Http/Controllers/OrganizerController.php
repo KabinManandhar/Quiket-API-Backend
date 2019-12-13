@@ -46,7 +46,7 @@ class OrganizerController extends Controller
         $organizer->name=$request->name;
         $organizer->description=$request->description;
         $organizer->email=$request->email;
-        $organizer->password=$request->password;
+        $organizer->password=bcrypt($request->password);
         $organizer->phone_no=$request->phone_no;
         $organizer->save();
         return response([
@@ -86,7 +86,15 @@ class OrganizerController extends Controller
     public function update(Request $request, Organizer $organizer)
     {
 //        return $request;
-        $organizer->update($request->all());
+        $organizer->update([
+            'name' => $request->name,
+            'description' => $request->description,
+            'picture' => $request->picture,
+            'email' => $request->email,
+            'phone_no' => $request->phone_no,
+            'password' => bcrypt($request->password)
+        ]);
+        //$organizer->update($request->all());
         return response([
             'data'=> new OrganizerResource($organizer)
         ],201);
@@ -100,7 +108,8 @@ class OrganizerController extends Controller
      */
     public function destroy(Organizer $organizer)
     {
-        $this->destroy($organizer);
-        return response()->json('deleted');
+        $organizer->delete();
+        return response()->json(['data'=>'deleted']);
     }
+
 }
