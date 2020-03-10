@@ -16,8 +16,8 @@ $factory->define(Event::class, function (Faker $faker) {
         'type'=>$faker->word,
         'picture'=>$faker->sentence,
         'status'=>$faker->boolean,
-        'start_date/time'=>$faker->dateTime,
-        'end_date/time'=>$faker->dateTime,
+        'start_datetime'=>$faker->dateTime,
+        'end_datetime'=>$faker->dateTime,
         'organizer_id'=> Organizer::all()->pluck('id')->random(),
     ];
 });

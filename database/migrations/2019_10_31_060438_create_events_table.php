@@ -22,8 +22,8 @@ class CreateEventsTable extends Migration
             $table->string('type');
             $table->string('picture')->nullable();
             $table->boolean('status');
-            $table->dateTime('start_date/time');
-            $table->dateTime('end_date/time');
+            $table->dateTime('start_datetime');
+            $table->dateTime('end_datetime');
             $table->bigInteger('organizer_id')->unsigned()->index();
             $table->foreign('organizer_id')->references('id')->on('organizers')->onDelete('cascade');
             $table->timestamps();

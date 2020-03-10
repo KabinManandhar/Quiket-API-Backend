@@ -11,10 +11,10 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        factory(App\Model\User::class,50)->create();
-        factory(App\Model\Organizer::class,50)->create();
-        factory(App\Model\Event::class,25)->create();
-        factory(App\Model\Ticket::class,25)->create();
-        factory(App\Model\Order::class,25)->create();
-        factory(App\Model\Bookmark::class,25)->create();    }
+        factory(App\Model\User::class,5)->create();
+        factory(App\Model\Organizer::class,5)->create();
+        factory(App\Model\Event::class,10)->create();
+        factory(App\Model\Ticket::class,20)->create();
+        factory(App\Model\Order::class,20)->create();
+        factory(App\Model\Bookmark::class,5)->create();    }
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\Event\EventCollection;
+use App\Http\Resources\Event\EventResource;
 use App\Model\Event;
 use App\Model\Organizer;
 use Illuminate\Http\Request;
@@ -44,9 +45,20 @@ class EventController extends Controller
      * @param  \App\Model\Event  $event
      * @return \Illuminate\Http\Response
      */
-    public function show(Organizer $organizer)
+    public function showOrganizerEvent(Organizer $organizer)
     {
         return $organizer->events;
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\Model\Event  $event
+     * @return \Illuminate\Http\Response
+     */
+    public function show(Event $event)
+    {
+
     }
 
     /**

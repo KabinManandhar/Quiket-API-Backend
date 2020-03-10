@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use Illuminate\Validation\Validator;
 
 use App\Http\Requests\OrganizerRequest;
 use App\Http\Resources\Organizer\OrganizerCollection;
@@ -19,10 +20,7 @@ class OrganizerController extends Controller
      *
      * @return AnonymousResourceCollection
      */
-    public function __construct()
-    {
-        $this->middleware('auth:organizer')->except('index','show');
-    }
+
 
     public function index()
     {
@@ -49,10 +47,13 @@ class OrganizerController extends Controller
         $organizer->description=$request->description;
         $organizer->email=$request->email;
         $organizer->password=bcrypt($request->password);
+        //$organizer->password_confirmation=bcrypt($request->password_confirmation);
         $organizer->phone_no=$request->phone_no;
         $organizer->save();
+        $accessToken=$organizer->createToken('test')->accessToken;
         return response([
-            'data'=> new OrganizerResource($organizer)
+            'data'=> new OrganizerResource($organizer),
+            'access-token'=>$accessToken
         ],201);
     }
 

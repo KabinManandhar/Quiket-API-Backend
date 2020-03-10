@@ -18,8 +18,8 @@ $factory->define(Ticket::class, function (Faker $faker) {
         'status'=>$faker->boolean,
         'refundable'=>$faker->boolean,
         'promo_code'=>$faker->word,
-        'start_date/time'=>$faker->dateTime,
-        'end_date/time'=>$faker->dateTime,
+        'start_datetime'=>$faker->dateTime,
+        'end_datetime'=>$faker->dateTime,
         'event_id'=> Event::all()->pluck('id')->random(),
     ];
 });
