@@ -36,7 +36,18 @@ class UserController extends Controller
      */
     public function store(UserRequest $request)
     {
-        return $request;
+        $user= new User;
+        $user->name=$request->name;
+        $user->email=$request->email;
+        $user->password=bcrypt($request->password);
+        $user->phone_no=$request->phone_no;
+        $user->picture=$request->picture;
+        $user->save();
+        $accessToken=$user->createToken('test')->accessToken;
+        return response([
+            'data'=> new UserResource($user),
+            'access-token'=>$accessToken
+        ],201);
     }
 
     /**

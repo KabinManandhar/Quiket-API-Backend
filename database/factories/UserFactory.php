@@ -8,10 +8,10 @@ use Illuminate\Database\Eloquent\Factory;
 
 $factory->define(User::class, function (Faker $faker) {
     return [
-    'first_name'=> $faker->firstName,
-        'last_name'=> $faker->lastName,
+    'name'=> $faker->name,
         'email'=> $faker->email,
         'password'=> bcrypt('secret'),
         'phone_no'=> $faker->phoneNumber,
+        'picture'=>$faker->word
     ];
 });

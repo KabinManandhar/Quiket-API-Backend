@@ -26,6 +26,7 @@ use Illuminate\Support\Facades\Route;
 //        Route::apiResource('/{event}/tickets','TicketController');
 //    });});
 
+Route::post('/users','UserController@store')->name('users.register');
 //For Organizer
 Route::group(['prefix'=>'organizers' ],function(){
     Route::get('/','OrganizerController@index')->name('organizers.index');//Get all Organizers

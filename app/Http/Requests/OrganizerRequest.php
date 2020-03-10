@@ -28,7 +28,6 @@ class OrganizerRequest extends FormRequest
             'description' =>'required',
             'email'=>'required|unique:organizers',
             'password'=>'required|confirmed',
-//            'password_confirmation'=>'required',
             'phone_no'=>'required|max:10',
             'picture'=>'nullable'
         ];
