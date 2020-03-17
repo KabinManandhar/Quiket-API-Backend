@@ -27,16 +27,22 @@ use Illuminate\Support\Facades\Route;
 //    });});
 
 Route::post('/users','UserController@store')->name('users.register');
+Route::post('/organizers','OrganizerController@store')->name('organizers.register');//Register Organizer
 //For Organizer
-Route::group(['prefix'=>'organizers' ],function(){
+Route::group(['prefix'=>'organizers','middleware'=>['auth:organizer'] ],function(){
     Route::get('/','OrganizerController@index')->name('organizers.index');//Get all Organizers
     Route::get('/{organizer}','OrganizerController@show')->name('organizers.show');//Get selected Organizer
-    Route::post('/','OrganizerController@store')->name('organizers.register');//Register Organizer
+
     Route::put('/{organizer}','OrganizerController@update')->name('organizers.update');//Update Organizer Data
-    Route::delete('/{organizer}','OrganizerController@delete')->name('organizers.delete');//Delete Organizer Data
+    Route::delete('/{organizer}','OrganizerController@destroy')->name('organizers.delete');//Delete Organizer Data
     Route::group(['prefix'=>'events'],function(){
         Route::apiResource('/{event}/tickets','TicketController');
     });});
+
+//View All
+Route::get('/','OrganizerController@index')->name('organizers.index')->middleware("auth:organizer");
+Route::post('/login','OrganizerController@login')->name('organizers.login');
+Route::post('/users','UserController@store')->name('users.register');
 //Route::get('/organizers','OrganizerController@index');//Get all Organizers
 //Route::get('/organizers/{organizer}','OrganizerController@show');//Get selected Organizer
 //Route::post('/organizers','OrganizerController@store');//Register Organizer

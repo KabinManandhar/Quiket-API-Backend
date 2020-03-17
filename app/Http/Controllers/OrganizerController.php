@@ -1,45 +1,44 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Model\OAuthAccessToken;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Validator;
 
 use App\Http\Requests\OrganizerRequest;
-use App\Http\Resources\Organizer\OrganizerCollection;
-use App\Http\Resources\Organizer\OrganizerResource;
+
 use App\Model\Organizer;
 use Illuminate\Http\Request;
-use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+
 use App\Exceptions\UnathorizedException;
 use Illuminate\Support\Facades\Auth;
 
 class OrganizerController extends Controller
 
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return AnonymousResourceCollection
-     */
+
+    public function login(Request $request){
+//        dd(Auth::guard('organizer'));
+        $credentials=request(['name','email','password']);
+        $organizer=Organizer::where('email',$credentials['email'])->first();
+        $id=$organizer->id;
+        $token=OAuthAccessToken::where('user_id',$id)->first();
+        dd($token);
+        if($organizer){
+            dd(Hash::check($credentials['password'],$organizer->password));
+            if(Hash::check($credentials['password'],$organizer->password)){
+                return response(['success'=>true]);
+            }
+        }
+
+        }
 
 
     public function index()
     {
-        return OrganizerCollection::collection(Organizer::all());
+        return Organizer::all();
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-
-    }
-
-    /**
-     * @param OrganizerRequest $request
-     */
     public function store(OrganizerRequest $request)
     {
         $organizer= new Organizer;
@@ -50,42 +49,19 @@ class OrganizerController extends Controller
         //$organizer->password_confirmation=bcrypt($request->password_confirmation);
         $organizer->phone_no=$request->phone_no;
         $organizer->save();
-        $accessToken=$organizer->createToken('test')->accessToken;
+        $accessToken=$organizer->createToken($request->name)->accessToken;
         return response([
-            'data'=> new OrganizerResource($organizer),
+            'data'=> $organizer,
             'access-token'=>$accessToken
         ],201);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param Organizer $organizer
-     * @return OrganizerResource
-     */
     public function show(Organizer $organizer)
     {
-        return new OrganizerResource($organizer);
+        return $organizer;
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param Organizer $organizer
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Organizer $organizer)
-    {
-        //
-    }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param Organizer $organizer
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, Organizer $organizer)
     {
         $this->OrganizerChecker($organizer);
@@ -99,16 +75,10 @@ class OrganizerController extends Controller
         ]);
         //$organizer->update($request->all());
         return response([
-            'data'=> new OrganizerResource($organizer)
+            'data'=> new $organizer,
         ],201);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param Organizer $organizer
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(Organizer $organizer)
     {
         $this->OrganizerChecker($organizer);
@@ -116,6 +86,7 @@ class OrganizerController extends Controller
         return response()->json(['data'=>'deleted']);
     }
     public function OrganizerChecker($organizer){
+        dd(Auth::id());
         if (Auth::id() !== $organizer->id){
             throw new UnathorizedException;
         }

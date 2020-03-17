@@ -4,6 +4,7 @@ namespace App\Model;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Laravel\Passport\Token;
 use SMartins\PassportMultiauth\HasMultiAuthApiTokens;
 
 class Organizer extends Authenticatable
@@ -14,5 +15,9 @@ class Organizer extends Authenticatable
     use HasMultiAuthApiTokens,Notifiable;
     public function events(){
         return $this->hasMany(Event::class);
+    }
+
+    public function OAuthAccessToken(){
+        return $this->hasMany('\App\OauthAccessToken');
     }
 }

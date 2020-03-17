@@ -22,13 +22,13 @@ class User extends Authenticatable
         return $this->hasMany(Bookmark::class);
     }
 
-    public function getJWTIdentifier()
-    {
-        return $this->getKey();
-    }
-
-    public function getJWTCustomClaims()
-    {
-        return [];
-    }
+//    public function getJWTIdentifier()
+//    {
+//        return $this->getKey();
+//    }
+//
+//    public function getJWTCustomClaims()
+//    {
+//        return [];
+//    }
 }

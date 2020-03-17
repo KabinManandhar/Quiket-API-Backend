@@ -15,7 +15,7 @@ class EventController extends Controller
      */
     public function index()
     {
-        return EventCollection::collection(Event::all());
+        return Event::all();
     }
 
     /**

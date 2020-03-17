@@ -26,7 +26,7 @@ class OrganizerRequest extends FormRequest
         return [
             'name'=> 'required',
             'description' =>'required',
-            'email'=>'required|unique:organizers',
+            'email'=>'required|string|email|unique:organizers',
             'password'=>'required|confirmed',
             'phone_no'=>'required|max:10',
             'picture'=>'nullable'
