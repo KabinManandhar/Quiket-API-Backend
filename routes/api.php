@@ -42,6 +42,7 @@ Route::group(['prefix'=>'organizers','middleware'=>['auth:organizer'] ],function
 //View All
 Route::get('/','OrganizerController@index')->name('organizers.index')->middleware("auth:organizer");
 Route::post('/login','OrganizerController@login')->name('organizers.login');
+Route::post('/logout/{organizer}','OrganizerController@logout')->name('organizers.logout');
 Route::post('/users','UserController@store')->name('users.register');
 //Route::get('/organizers','OrganizerController@index');//Get all Organizers
 //Route::get('/organizers/{organizer}','OrganizerController@show');//Get selected Organizer

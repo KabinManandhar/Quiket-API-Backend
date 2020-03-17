@@ -17,7 +17,5 @@ class Organizer extends Authenticatable
         return $this->hasMany(Event::class);
     }
 
-    public function OAuthAccessToken(){
-        return $this->hasMany('\App\OauthAccessToken');
-    }
+
 }

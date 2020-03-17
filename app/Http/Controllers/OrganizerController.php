@@ -1,7 +1,9 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Model\OAuthAccessToken;
+
+
+use App\OauthAccessToken;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Validator;
 
@@ -22,16 +24,26 @@ class OrganizerController extends Controller
         $credentials=request(['name','email','password']);
         $organizer=Organizer::where('email',$credentials['email'])->first();
         $id=$organizer->id;
-        $token=OAuthAccessToken::where('user_id',$id)->first();
-        dd($token);
+        $token=OauthAccessToken::where('user_id',$id)->first();
+        if($token) {
+            $token->delete();
+        }
         if($organizer){
-            dd(Hash::check($credentials['password'],$organizer->password));
+//            dd(Hash::check($credentials['password'],$organizer->password));
             if(Hash::check($credentials['password'],$organizer->password)){
-                return response(['success'=>true]);
+                $accessToken=$organizer->createToken($request->name)->accessToken;
+                return response(['success'=>true,'token'=>$accessToken]);
             }
         }
-
         }
+        public function logout(Organizer $organizer)
+    {
+        dd($organizer);
+        $this->OrganizerChecker($organizer);
+        $organizer->delete();
+        return response()->json(['data'=>'deleted']);
+    }
+
 
 
     public function index()
