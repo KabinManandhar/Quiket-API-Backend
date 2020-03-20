@@ -6,7 +6,7 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Storage;
 use App\Model\OauthAccessToken;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Validator;
+
 
 use App\Http\Requests\OrganizerRequest;
 
@@ -15,12 +15,20 @@ use Illuminate\Http\Request;
 
 use App\Exceptions\UnathorizedException;
 use Illuminate\Support\Facades\Auth;
-use function Sodium\randombytes_random16;
 
+
+/**
+ * Class OrganizerController
+ * @package App\Http\Controllers
+ */
 class OrganizerController extends Controller
 
 {
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+     */
     public function login(Request $request){
 
         $credentials=request(['name','email','password']);
@@ -37,7 +45,13 @@ class OrganizerController extends Controller
             }
         }
         }
-        public function logout(Organizer $organizer)
+
+    /**
+     * @param Organizer $organizer
+     * @return \Illuminate\Http\JsonResponse
+     * @throws UnathorizedException
+     */
+    public function logout(Organizer $organizer)
     {
         $this->OrganizerChecker($organizer);
         $id=$organizer->id;
@@ -46,6 +60,11 @@ class OrganizerController extends Controller
         return response()->json(['data'=>'Token Deleted']);
     }
 
+    /**
+     * @param OrganizerRequest $request
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+     * @throws \SMartins\PassportMultiauth\Exceptions\MissingConfigException
+     */
     public function store(OrganizerRequest $request)
     {
         $organizer= new Organizer;
@@ -58,8 +77,8 @@ class OrganizerController extends Controller
         if($picture) {
             $picture = preg_replace('/^data:image\/\w+;base64,/', '', $picture);
             $picture = str_replace(' ', '+', $picture);
-            $pictureName = rand() . '.png';
-            Storage::disk('public/organizer')->put($pictureName, base64_decode($picture));
+            $pictureName = $organizer->email.rand() . '.png';
+            Storage::disk('public')->put($pictureName, base64_decode($picture));
             $organizer->picture = $pictureName;
         }
         $organizer->save();
@@ -70,12 +89,22 @@ class OrganizerController extends Controller
         ],201);
     }
 
+    /**
+     * @param Organizer $organizer
+     * @return Organizer
+     */
     public function show(Organizer $organizer)
     {
         return $organizer;
     }
 
 
+    /**
+     * @param Request $request
+     * @param Organizer $organizer
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+     * @throws UnathorizedException
+     */
     public function update(Request $request, Organizer $organizer)
     {
         $this->OrganizerChecker($organizer);
@@ -84,8 +113,8 @@ class OrganizerController extends Controller
         if($updatePic) {
             $picture = preg_replace('/^data:image\/\w+;base64,/', '', $updatePic);
             $picture = str_replace(' ', '+', $picture);
-            $pictureName = rand() . '.png';
-            Storage::disk('public/organizer')->put($pictureName, base64_decode($picture));
+            $pictureName = $organizer->email.rand() . '.png';
+            Storage::disk('public')->put($pictureName, base64_decode($picture));
             $request->picture = $pictureName;
             $organizer->update([
                 'name' => $request->name,
@@ -103,14 +132,24 @@ class OrganizerController extends Controller
         ],201);
     }
 
+    /**
+     * @param Organizer $organizer
+     * @return \Illuminate\Http\JsonResponse
+     * @throws UnathorizedException
+     */
     public function destroy(Organizer $organizer)
     {
         $this->OrganizerChecker($organizer);
         $pic=$organizer->picture;
-        Storage::disk('public/organizer')->delete($pic);
+        Storage::disk('public')->delete($pic);
         $organizer->delete();
         return response()->json(['data'=>'deleted']);
     }
+
+    /**
+     * @param $organizer
+     * @throws UnathorizedException
+     */
     public function OrganizerChecker($organizer){
 
         if (Auth::id() !== $organizer->id){

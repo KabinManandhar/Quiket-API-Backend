@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Event extends Model
 {
+    protected $fillable=['name','description','category','type','venue','status','start_datetime','end_datetime','organizer_id'];
     public function organizer(){
         return $this->belongsTo(Organizer::class);
     }

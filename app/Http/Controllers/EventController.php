@@ -2,16 +2,22 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\Event\EventCollection;
-use App\Http\Resources\Event\EventResource;
+use App\Exceptions\UnathorizedException;
 use App\Model\Event;
 use App\Model\Organizer;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
+/**
+ * Class EventController
+ * @package App\Http\Controllers
+ */
 class EventController extends Controller
 {
+
     /**
-     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+     * @return Event[]|\Illuminate\Database\Eloquent\Collection
      */
     public function index()
     {
@@ -19,79 +25,143 @@ class EventController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
      */
     public function create()
     {
-        //
+
     }
 
+
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
      */
     public function store(Request $request)
     {
-        //
+        $event= new Event;
+        $event->name=$request->name;
+        $event->description=$request->description;
+        $event->venue=$request->venue;
+        $event->category=$request->category;
+        $event->type=$request->type;
+        $event->status=$request->status;
+        $event->start_datetime=$request->start_datetime;
+        $event->end_datetime=$request->end_datetime;
+        $event->organizer_id=$request->organizer_id;
+        $picture = $request->picture;  // your base64 encoded
+        if($picture) {
+            $picture = preg_replace('/^data:image\/\w+;base64,/', '', $picture);
+            $picture = str_replace(' ', '+', $picture);
+            $pictureName = $event->name.rand() . '.png';
+            Storage::disk('public/event')->put($pictureName, base64_decode($picture));
+            $event->picture = $pictureName;
+        }
+        $event->save();
+        return response([
+            'data'=> $event,
+        ],201);
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  \App\Model\Event  $event
-     * @return \Illuminate\Http\Response
+     * @param Organizer $organizer
+     * @return mixed
      */
     public function showOrganizerEvent(Organizer $organizer)
     {
         return $organizer->events;
     }
 
+
     /**
-     * Display the specified resource.
-     *
-     * @param  \App\Model\Event  $event
-     * @return \Illuminate\Http\Response
+     * @param Event $event
      */
     public function show(Event $event)
     {
 
     }
 
+
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Model\Event  $event
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @param Organizer $organizer
+     * @param Event $event
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+     * @throws UnathorizedException
      */
-    public function edit(Event $event)
+    public function update(Request $request, Organizer $organizer, Event $event)
     {
-        //
+        $this->OrganizerChecker($organizer);
+
+
+        if($event->organizer_id == $request->organizer_id) {
+
+            $updatePic = $request->picture;
+
+            if ($updatePic) {
+                $picture = preg_replace('/^data:image\/\w+;base64,/', '', $updatePic);
+                $picture = str_replace(' ', '+', $picture);
+                $pictureName = $event->name .rand() . '.png';
+                Storage::disk('public')->put($pictureName, base64_decode($picture));
+                $request->picture = $pictureName;
+                $event->update([
+                    'name' => $request->name,
+                    'description' => $request->description,
+                    'picture' => $request->picture,
+                    'venue' => $request->venue,
+                    'category' => $request->category,
+                    'type' => $request->type,
+                    'status' => $request->status,
+                    'start_datetime' => $request->start_datetime,
+                    'end_datetime' => $request->end_datetime,
+                    'organizer_id' => $organizer->id,
+                ]);
+            } else {
+                $event->update($request->all());
+            }
+            return response([
+                'data' => $event,
+            ], 201);
+        }
+        else{
+            return response(['error'=>"Event doesn't belong to you."]);
+        }
+
+    }
+
+
+    /**
+     * @param Organizer $organizer
+     * @param Event $event
+     * @return \Illuminate\Http\JsonResponse
+     * @throws UnathorizedException
+     */
+    public function destroy(Organizer $organizer,Event $event)
+    {
+
+       $this->OrganizerChecker($organizer);
+       if($event->organizer_id == $organizer->id) {
+
+           $pic = $event->picture;
+           if ($pic) {
+               Storage::disk('public')->delete($pic);
+           }
+           $event->delete();
+           return response()->json(['data' => 'deleted']);
+       }
+       else{
+           return response(['error'=>"Event doesn't belong to you."]);
+       }
     }
 
     /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Model\Event  $event
-     * @return \Illuminate\Http\Response
+     * @param $organizer
+     * @throws UnathorizedException
      */
-    public function update(Request $request, Event $event)
+    public function OrganizerChecker($organizer)
     {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Model\Event  $event
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Event $event)
-    {
-        //
+        if (Auth::id() !== $organizer->id) {
+            throw new UnathorizedException;
+        }
     }
 }

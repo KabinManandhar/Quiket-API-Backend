@@ -13,8 +13,16 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 
+/**
+ * Class UserController
+ * @package App\Http\Controllers
+ */
 class UserController extends Controller
 {
+    /**
+     * @param Request $request
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+     */
     public function login(Request $request){
 
         $credentials=request(['name','email','password']);
@@ -32,6 +40,12 @@ class UserController extends Controller
             }
         }
     }
+
+    /**
+     * @param Organizer $user
+     * @return \Illuminate\Http\JsonResponse
+     * @throws UnathorizedException
+     */
     public function logout(Organizer $user)
     {
         $this->UserChecker($user);
@@ -42,6 +56,11 @@ class UserController extends Controller
     }
 
 
+    /**
+     * @param UserRequest $request
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+     * @throws \SMartins\PassportMultiauth\Exceptions\MissingConfigException
+     */
     public function store(UserRequest $request)
     {
         $user= new User;
@@ -49,11 +68,12 @@ class UserController extends Controller
         $user->email=$request->email;
         $user->password=bcrypt($request->password);
         $picture=$request->picture;
+
         if($picture) {
             $picture = preg_replace('/^data:image\/\w+;base64,/', '', $picture);
             $picture = str_replace(' ', '+', $picture);
-            $pictureName = rand() . '.png';
-            Storage::disk('public/user')->put($pictureName, base64_decode($picture));
+            $pictureName = $user->email .rand(). '.png';
+            Storage::disk('public')->put($pictureName, base64_decode($picture));
             $user->picture = $pictureName;
         }
         $user->phone_no=$request->phone_no;
@@ -66,27 +86,67 @@ class UserController extends Controller
     }
 
 
+    /**
+     * @param User $user
+     * @return User
+     */
     public function show(User $user)
     {
         return $user;
     }
 
 
+    /**
+     * @param Request $request
+     * @param User $user
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+     * @throws UnathorizedException
+     */
     public function update(Request $request, User $user)
     {
-        //
+        $this->UserChecker($user);
+        $updatePic=$request->picture;
+//        dd($request);
+        if($updatePic) {
+            $picture = preg_replace('/^data:image\/\w+;base64,/', '', $updatePic);
+            $picture = str_replace(' ', '+', $picture);
+            $pictureName = $user->email .rand() . '.png';
+            Storage::disk('public/')->put($pictureName, base64_decode($picture));
+            $request->picture = $pictureName;
+            $user->update([
+                'name' => $request->name,
+                'description' => $request->description,
+                'picture' => $request->picture,
+                'email' => $request->email,
+                'phone_no' => $request->phone_no,
+                'password' => bcrypt($request->password)
+            ]);
+        }else{
+            $user->update($request->all());
+        }
+        return response([
+            'data'=> $user,
+        ],201);
     }
 
     /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Model\User  $user
-     * @return \Illuminate\Http\Response
+     * @param User $user
+     * @return \Illuminate\Http\JsonResponse
+     * @throws UnathorizedException
      */
     public function destroy(User $user)
     {
-        //
+        $this->UserChecker($user);
+        $pic=$user->picture;
+        Storage::disk('public')->delete($pic);
+        $user->delete();
+        return response()->json(['data'=>'deleted']);
     }
+
+    /**
+     * @param User $user
+     * @throws UnathorizedException
+     */
     public function UserChecker(User $user)
     {
 
