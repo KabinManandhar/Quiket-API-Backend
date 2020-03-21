@@ -65,7 +65,7 @@ class OrganizerController extends Controller
      * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
      * @throws \SMartins\PassportMultiauth\Exceptions\MissingConfigException
      */
-    public function store(OrganizerRequest $request)
+    public function store(Request $request)
     {
         $organizer= new Organizer;
         $organizer->name=$request->name;
@@ -150,7 +150,7 @@ class OrganizerController extends Controller
      * @param $organizer
      * @throws UnathorizedException
      */
-    public function OrganizerChecker($organizer){
+    private function OrganizerChecker($organizer){
 
         if (Auth::id() !== $organizer->id){
             throw new UnathorizedException;

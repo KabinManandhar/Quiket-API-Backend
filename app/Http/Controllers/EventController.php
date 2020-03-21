@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Exceptions\UnathorizedException;
+use App\Http\Requests\EventRequest;
 use App\Model\Event;
 use App\Model\Organizer;
 use Illuminate\Http\Request;
@@ -37,7 +38,7 @@ class EventController extends Controller
      * @param Request $request
      * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(EventRequest $request)
     {
         $event= new Event;
         $event->name=$request->name;
@@ -78,7 +79,7 @@ class EventController extends Controller
      */
     public function show(Event $event)
     {
-
+        return $event;
     }
 
 
@@ -92,12 +93,8 @@ class EventController extends Controller
     public function update(Request $request, Organizer $organizer, Event $event)
     {
         $this->OrganizerChecker($organizer);
-
-
         if($event->organizer_id == $request->organizer_id) {
-
             $updatePic = $request->picture;
-
             if ($updatePic) {
                 $picture = preg_replace('/^data:image\/\w+;base64,/', '', $updatePic);
                 $picture = str_replace(' ', '+', $picture);
@@ -153,12 +150,15 @@ class EventController extends Controller
            return response(['error'=>"Event doesn't belong to you."]);
        }
     }
+    public function showTicket(Event $event){
+        return $event->tickets;
+    }
 
     /**
      * @param $organizer
      * @throws UnathorizedException
      */
-    public function OrganizerChecker($organizer)
+    private function OrganizerChecker($organizer)
     {
         if (Auth::id() !== $organizer->id) {
             throw new UnathorizedException;

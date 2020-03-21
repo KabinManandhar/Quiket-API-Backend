@@ -147,7 +147,7 @@ class UserController extends Controller
      * @param User $user
      * @throws UnathorizedException
      */
-    public function UserChecker(User $user)
+    private function UserChecker(User $user)
     {
 
         if (Auth::id() !== $user->id) {
