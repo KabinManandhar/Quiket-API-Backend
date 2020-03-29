@@ -22,8 +22,8 @@ class CreateOrdersTable extends Migration
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('event_id')->references('id')->on('events')->onDelete('cascade');
             $table->boolean('status');
-            $table->boolean('refundable');
-            $table->boolean('refunded');
+//            $table->boolean('refundable');
+//            $table->boolean('refunded');
             $table->string('qr_code');
             $table->timestamps();
         });

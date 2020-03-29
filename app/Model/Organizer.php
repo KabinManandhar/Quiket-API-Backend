@@ -16,6 +16,4 @@ class Organizer extends Authenticatable
     public function events(){
         return $this->hasMany(Event::class);
     }
-
-
 }

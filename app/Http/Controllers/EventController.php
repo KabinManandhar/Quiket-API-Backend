@@ -22,16 +22,9 @@ class EventController extends Controller
      */
     public function index()
     {
-        return Event::all();
+        return Event::all('id');
     }
 
-    /**
-     *
-     */
-    public function create()
-    {
-
-    }
 
 
     /**

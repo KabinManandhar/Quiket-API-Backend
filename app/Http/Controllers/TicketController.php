@@ -81,7 +81,7 @@ class TicketController extends Controller
             $ticket->delete();
             return response()->json(['data' => 'deleted']);
         }else{
-            return response()->json(['error' => 'cannot']);
+            return response()->json(['error' => 'Cannot Delete']);
         }
     }
 

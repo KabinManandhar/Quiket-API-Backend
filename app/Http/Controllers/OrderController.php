@@ -14,7 +14,8 @@ class OrderController extends Controller
      */
     public function index()
     {
-        //
+        Order::all()->where('id'==2);
+
     }
 
     /**

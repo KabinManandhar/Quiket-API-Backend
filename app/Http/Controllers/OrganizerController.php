@@ -33,18 +33,20 @@ class OrganizerController extends Controller
 
         $credentials=request(['name','email','password']);
         $organizer=Organizer::where('email',$credentials['email'])->first();
+        if($organizer){
         $id=$organizer->id;
         $token=OauthAccessToken::where('user_id',$id)->first();
         if($token) {
             $token->delete();
         }
-        if($organizer){
-            if(Hash::check($credentials['password'],$organizer->password)){
+        if(Hash::check($credentials['password'],$organizer->password)){
                 $accessToken=$organizer->createToken($organizer->name)->accessToken;
-                return response(['success'=>true,'token'=>$accessToken]);
+                return response(['success'=>true,'id'=>$id,'token'=>$accessToken]);
             }
+        }else{
+            return response(['success'=>false]);
         }
-        }
+    }
 
     /**
      * @param Organizer $organizer
@@ -65,7 +67,7 @@ class OrganizerController extends Controller
      * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
      * @throws \SMartins\PassportMultiauth\Exceptions\MissingConfigException
      */
-    public function store(Request $request)
+    public function store(OrganizerRequest $request)
     {
         $organizer= new Organizer;
         $organizer->name=$request->name;
@@ -83,8 +85,8 @@ class OrganizerController extends Controller
         }
         $organizer->save();
         $accessToken=$organizer->createToken($request->name)->accessToken;
-        return response([
-            'data'=> $organizer,
+        return response(['success'=>true,
+            'id'=> $organizer->id,
             'access-token'=>$accessToken
         ],201);
     }
