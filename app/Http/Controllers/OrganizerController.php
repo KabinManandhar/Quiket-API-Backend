@@ -39,12 +39,17 @@ class OrganizerController extends Controller
         if($token) {
             $token->delete();
         }
+
         if(Hash::check($credentials['password'],$organizer->password)){
-                $accessToken=$organizer->createToken($organizer->name)->accessToken;
-                return response(['success'=>true,'id'=>$id,'token'=>$accessToken]);
+            $token=OauthAccessToken::where('user_id',$id)->first();
+            if($token) {
+                $token->delete();
             }
-        }else{
+            $accessToken=$organizer->createToken($organizer->name)->accessToken;
+            return response(['success'=>true,'id'=>$id,'token'=>$accessToken]);
+            }else{
             return response(['success'=>false]);
+        }
         }
     }
 

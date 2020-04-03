@@ -14,8 +14,8 @@ Route::post('/organizer/login','OrganizerController@login')->name('organizer.log
 Route::post('/user/login','UserController@login')->name('user.login');
 
 //Logout
-Route::post('/logout/{organizer}','OrganizerController@logout')->name('organizer.logout');
-Route::post('/logout/{user}','UserController@logout')->name('user.logout');
+Route::post('/logout/{organizer}','OrganizerController@logout')->name('organizer.logout')->middleware('auth:organizer');;
+Route::post('/logout/{user}','UserController@logout')->name('user.logout')->middleware('auth:user');;
 
 //View All
 Route::get('/events','EventController@index')->name('event.index');
@@ -32,7 +32,7 @@ Route::get('/{organizer}/events','EventController@showOrganizerEvent')->name('ev
 Route::put('/organizers/{organizer}', 'OrganizerController@update')->name('organizers.update')->middleware('auth:organizer');//Update Organizer Data
 Route::put('/organizers/{organizer}/{event}', 'EventController@update')->name('events.update')->middleware('auth:organizer');//Update Event Data
 Route::delete('/organizers/{organizer}', 'OrganizerController@destroy')->name('organizers.delete')->middleware('auth:organizer');//Delete Organizer Data);
-Route::post('/organizers/event','EventController@store')->name('event.store')->middleware('auth:organizer');
+Route::post('/organizers/events','EventController@store')->name('event.store')->middleware('auth:organizer');
 Route::post('/organizers/event/ticket','TicketController@store')->name('ticket.store')->middleware('auth:organizer');
 Route::put('/organizers/{organizer}/events/{event}/tickets/{ticket}','TicketController@update')->name('ticket.update')->middleware('auth:organizer');
 Route::delete('/organizers/{organizer}/events/{event}','EventController@destroy')->name('organizer.event.delete')->middleware('auth:organizer');

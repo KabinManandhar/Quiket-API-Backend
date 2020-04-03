@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
+
 /**
  * Class EventController
  * @package App\Http\Controllers
@@ -45,12 +46,12 @@ class EventController extends Controller
         if($picture) {
             $picture = preg_replace('/^data:image\/\w+;base64,/', '', $picture);
             $picture = str_replace(' ', '+', $picture);
-            $pictureName = $event->name.rand() . '.png';
+            $pictureName = date('mdYHis').uniqid(). '.png';
             Storage::disk('public')->put($pictureName, base64_decode($picture));
             $event->picture = $pictureName;
         }
         $event->save();
-        return response([$event],201);
+        return response(['success'=>true],201);
     }
 
     /**
@@ -69,12 +70,15 @@ class EventController extends Controller
     public function show(Event $event)
     {
         if($event->picture) {
-            $type = pathinfo($event->picture, PATHINFO_EXTENSION);
-            $path=Storage::disk('public')->get($event->picture);
-            $base64 = base64_encode($path);
+//            $type = pathinfo($event->picture, PATHINFO_EXTENSION);
+           // $path=Storage::disk('public')->get($event->picture);
+//            $base64 = base64_encode($path);
+           // $image= asset('storage/public/'.$event->picture);
+            $picture=Storage::url(''.$event->picture);
+
             return response(['name' => $event->name,
                 'description' => $event->description,
-                'picture' => $base64,
+                'picture' => $picture,
                 'venue' => $event->venue,
                 'category' => $event->category,
                 'type' => $event->type,
@@ -104,7 +108,7 @@ class EventController extends Controller
             if ($updatePic) {
                 $picture = preg_replace('/^data:image\/\w+;base64,/', '', $updatePic);
                 $picture = str_replace(' ', '+', $picture);
-                $pictureName = $request->name .rand() . '.png';
+                $pictureName = date('mdYHis').uniqid(). '.png';
                 Storage::disk('public')->delete($event->picture);
                 Storage::disk('public')->put($pictureName, base64_decode($picture));
                 $request->picture = $pictureName;
@@ -170,6 +174,5 @@ class EventController extends Controller
             throw new UnathorizedException;
 
         }
-        return true;
     }
 }

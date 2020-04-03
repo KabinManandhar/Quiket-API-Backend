@@ -37,6 +37,8 @@ class UserController extends Controller
             if(Hash::check($credentials['password'],$user->password)){
                 $accessToken=$user->createToken($user->name)->accessToken;
                 return response(['success'=>true,'token'=>$accessToken]);
+            }else{
+                return response(['success'=>false]);
             }
         }
     }
