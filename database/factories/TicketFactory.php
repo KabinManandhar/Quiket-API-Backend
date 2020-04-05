@@ -17,7 +17,7 @@ $factory->define(Ticket::class, function (Faker $faker) {
         'ticket_type'=>$faker->word,
         'status'=>$faker->boolean,
        // 'refundable'=>$faker->boolean,
-        'promo_code'=>$faker->word,
+       // 'promo_code'=>$faker->word,
         'event_id'=> Event::all()->pluck('id')->random(),
     ];
 });

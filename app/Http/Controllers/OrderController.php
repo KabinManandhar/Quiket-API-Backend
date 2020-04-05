@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Model\Event;
 use App\Model\Order;
+use App\Model\Ticket;
 use Illuminate\Http\Request;
 
 class OrderController extends Controller
@@ -28,6 +30,11 @@ class OrderController extends Controller
         //
     }
 
+    public function showEventOrder(Event $event)
+    {
+        return $event->orders->pluck('id');
+    }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -39,15 +46,10 @@ class OrderController extends Controller
         //
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Model\Order  $order
-     * @return \Illuminate\Http\Response
-     */
+
     public function show(Order $order)
     {
-        //
+        return $order;
     }
 
     /**
@@ -83,4 +85,5 @@ class OrderController extends Controller
     {
         //
     }
+
 }

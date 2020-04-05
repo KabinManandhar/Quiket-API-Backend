@@ -23,9 +23,9 @@ class TicketController extends Controller
         $ticket->max_ticket_allowed_per_person=$request->max_ticket_allowed_per_person;
         $ticket->min_ticket_allowed_per_person=$request->min_ticket_allowed_per_person;
         $ticket->status=$request->status;
-        $ticket->refundable=$request->refundable;
+//        $ticket->refundable=$request->refundable;
         $ticket->ticket_type=$request->ticket_type;
-        $ticket->promo_code=$request->promo_code;
+//        $ticket->promo_code=$request->promo_code;
         $ticket->start_datetime=$request->start_datetime;
         $ticket->end_datetime=$request->end_datetime;
         $ticket->event_id=$request->event_id;
@@ -40,6 +40,12 @@ class TicketController extends Controller
     {
         return $ticket;
     }
+
+    public function showEventTicket(Event $event)
+    {
+        return $event->tickets->pluck('id');
+    }
+
 
 
     public function update(Request $request,Organizer $organizer, Event $event, Ticket $ticket)

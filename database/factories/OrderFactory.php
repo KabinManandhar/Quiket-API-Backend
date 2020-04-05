@@ -13,7 +13,7 @@ $factory->define(Order::class, function (Faker $faker) {
     return [
         'ticket_id'=> Ticket::all()->pluck('id')->random(),
         'user_id'=> User::all()->pluck('id')->random(),
-        'event_id'=>Event::all()->pluck('id')->random(),
+//        'event_id'=>Event::all()->pluck('id')->random(),
         'status'=> $faker->boolean,
         //'refunded'=> $faker->boolean,
         //'refundable'=> Ticket::all()->pluck('refundable')->random(),

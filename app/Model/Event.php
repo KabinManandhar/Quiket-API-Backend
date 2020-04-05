@@ -19,4 +19,8 @@ class Event extends Model
     public function bookmark(){
         return $this->belongsTo(Bookmark::class);
     }
+
+    public function orders(){
+        return $this->hasManyThrough(Order::class, Ticket::class);
+    }
 }

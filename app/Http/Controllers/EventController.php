@@ -76,7 +76,9 @@ class EventController extends Controller
            // $image= asset('storage/public/'.$event->picture);
             $picture=Storage::url(''.$event->picture);
 
-            return response(['name' => $event->name,
+            return response([
+                'id'=>$event->id,
+                'name' => $event->name,
                 'description' => $event->description,
                 'picture' => $picture,
                 'venue' => $event->venue,
