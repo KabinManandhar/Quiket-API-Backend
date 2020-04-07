@@ -130,7 +130,7 @@ class EventController extends Controller
             } else if(!$updatePic) {
                     $event->update($request->all());
             }
-            return response([$event], 201);
+            return response(['success'=>true], 201);
         }
         else{
             return response(['error'=>"Event doesn't belong to you."]);

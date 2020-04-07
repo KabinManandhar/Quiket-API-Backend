@@ -31,7 +31,7 @@ class OrganizerController extends Controller
      */
     public function login(Request $request){
 
-        $credentials=request(['name','email','password']);
+        $credentials=request(['email','password']);
         $organizer=Organizer::where('email',$credentials['email'])->first();
         if($organizer){
         $id=$organizer->id;
@@ -41,7 +41,7 @@ class OrganizerController extends Controller
         }
 
         if(Hash::check($credentials['password'],$organizer->password)){
-            $token=OauthAccessToken::where('user_id',$id)->first();
+            $token=OauthAccessToken::whgitere('user_id',$id)->first();
             if($token) {
                 $token->delete();
             }
@@ -64,7 +64,7 @@ class OrganizerController extends Controller
         $id=$organizer->id;
         $token=OauthAccessToken::where('user_id',$id)->first();
         $token->delete();
-        return response()->json(['data'=>'Token Deleted']);
+        return response()->json(['success'=>true]);
     }
 
     /**

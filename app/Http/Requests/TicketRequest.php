@@ -29,12 +29,8 @@ class TicketRequest extends FormRequest
             'price'=>'required',
             'ticket_type'=>'required',
             'status'=>'required',
-            'refundable'=>'required',
             'max_ticket_allowed_per_person'=>'required',
             'min_ticket_allowed_per_person'=>'required',
-            'start_datetime'=>'required',
-            'end_datetime'=>'required',
-            'promo_code'=>'nullable',
         ];
     }
 }

@@ -6,6 +6,7 @@ use App\Model\Event;
 use App\Model\Order;
 use App\Model\Ticket;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class OrderController extends Controller
 {
@@ -49,7 +50,15 @@ class OrderController extends Controller
 
     public function show(Order $order)
     {
-        return $order;
+        $final=DB::table('orders')
+            ->join('tickets','tickets.id','=','orders.ticket_id')
+            ->join('users','users.id','=','orders.user_id')
+            ->select('orders.*','users.name as User Name','tickets.name as Ticket Name')
+            ->where('orders.id','=',$order->id)
+            ->get();
+
+
+        return ($final);
     }
 
     /**

@@ -26,12 +26,11 @@ class TicketController extends Controller
 //        $ticket->refundable=$request->refundable;
         $ticket->ticket_type=$request->ticket_type;
 //        $ticket->promo_code=$request->promo_code;
-        $ticket->start_datetime=$request->start_datetime;
-        $ticket->end_datetime=$request->end_datetime;
+
         $ticket->event_id=$request->event_id;
         $ticket->save();
         return response([
-            'data'=> $ticket,
+            'success'=>true
         ],201);
     }
 
@@ -48,34 +47,17 @@ class TicketController extends Controller
 
 
 
-    public function update(Request $request,Organizer $organizer, Event $event, Ticket $ticket)
+    public function update(Request $request,Organizer $organizer, Ticket $ticket)
     {
         $this->OrganizerChecker($organizer);
-        if($event->id==$ticket->event_id){
-            $ticket->update($request->all());
-            return response([
-                'data' => $ticket,
+        $ticket->update($request->all());
+        return response([
+            'success' => true,
             ], 201);
-//            $ticket->update([
-//                'name' => $request->name,
-//                'description' => $request->description,
-//                'price' => $request->price,
-//                'max_ticket_allowed_per_person' => $request->max_ticket_allowed_per_person,
-//                'min_ticket_allowed_per_person' => $request->min_ticket_allowed_per_person,
-//                'ticket_type' => $request->ticket_type,
-//                'promo_code' => $request->promo_code,
-//                'refundable' => $request->refundable,
-//                'status' => $request->status,
-//                'start_datetime' => $request->start_datetime,
-//                'end_datetime' => $request->end_datetime,
-//                'event_id' => $organizer->event_id,
-//            ]);
-        }else{
-            return response(['error'=>"Event doesn't belong to you."]);
         }
 
 
-    }
+
 
 
 
