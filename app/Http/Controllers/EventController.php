@@ -103,9 +103,12 @@ class EventController extends Controller
      */
     public function update(Request $request, Organizer $organizer, Event $event)
     {
-
         $this->OrganizerChecker($organizer);
-        if($event->organizer_id == $request->organizer_id) {
+        // dd($event->organizer_id);
+        // dd($organizer->id);
+        
+
+        if($event->organizer_id == $organizer->id) {
             $updatePic = $request->picture;
             if ($updatePic) {
                 $picture = preg_replace('/^data:image\/\w+;base64,/', '', $updatePic);
@@ -147,7 +150,6 @@ class EventController extends Controller
      */
     public function destroy(Organizer $organizer,Event $event)
     {
-
        $this->OrganizerChecker($organizer);
        if($event->organizer_id == $organizer->id) {
 
@@ -156,7 +158,7 @@ class EventController extends Controller
                Storage::disk('public')->delete($pic);
            }
            $event->delete();
-           return response()->json(['data' => 'deleted']);
+           return response()->json(['success' => true]);
        }
        else{
            return response(['error'=>"Event doesn't belong to you."]);

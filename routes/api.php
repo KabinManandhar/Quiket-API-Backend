@@ -31,15 +31,17 @@ Route::get('/{organizer}/events','EventController@showOrganizerEvent')->name('ev
 
 //For Organizer
 Route::put('/organizers/{organizer}', 'OrganizerController@update')->name('organizers.update')->middleware('auth:organizer');//Update Organizer Data
-Route::put('/organizers/{organizer}/{event}', 'EventController@update')->name('events.update')->middleware('auth:organizer');//Update Event Data
+Route::put('/organizers/{organizer}/events/{event}', 'EventController@update')->name('events.update')->middleware('auth:organizer');//Update Event Data
 Route::delete('/organizers/{organizer}', 'OrganizerController@destroy')->name('organizers.delete')->middleware('auth:organizer');//Delete Organizer Data);
 Route::post('/organizers/events','EventController@store')->name('event.store')->middleware('auth:organizer');
+Route::put('orders/{order}','OrderController@update')->name('order.update')->middleware('auth:organizer');
 Route::post('/organizers/events/tickets','TicketController@store')->name('ticket.store')->middleware('auth:organizer');
-Route::put('/organizers/{organizer}/events/{event}/tickets/{ticket}','TicketController@update')->name('ticket.update')->middleware('auth:organizer');
+Route::put('/organizers/{organizer}/tickets/{ticket}','TicketController@update')->name('ticket.update')->middleware('auth:organizer');
 Route::delete('/organizers/{organizer}/events/{event}','EventController@destroy')->name('organizer.event.delete')->middleware('auth:organizer');
-Route::delete('/organizers/{organizer}/events/{event}/tickets/{ticket}','TicketController@destroy')->name('organizer.event.ticket.delete')->middleware('auth:organizer');
+Route::delete('/organizers/{organizer}/tickets/{ticket}','TicketController@destroy')->name('organizer.event.ticket.delete')->middleware('auth:organizer');
 Route::get('/events/{event}/orders','OrderController@showEventOrder')->name('orderEvent.show')->middleware('auth:organizer');
 Route::get('/orders/{order}','OrderController@show')->name('order.show')->middleware('auth:organizer');
+
 //For User
 Route::post('/user/{user}/bookmark','BookmarkController@store')->name('order.store')->middleware('auth:user');
 Route::post('/user/{user}/order','OrderController@store')->name('order.store')->middleware('auth:user');

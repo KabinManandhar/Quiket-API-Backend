@@ -18,6 +18,7 @@ class CreateTicketsTable extends Migration
             $table->string('name');
             $table->text('description');
             $table->integer('price');
+            $table->integer('total_ticket');
             $table->integer('max_ticket_allowed_per_person')->default(10);
             $table->integer('min_ticket_allowed_per_person')->default(1);
             $table->boolean('ticket_type');

@@ -61,6 +61,15 @@ class OrderController extends Controller
         return ($final);
     }
 
+    public function qrChecker(Request $request){
+        $final=DB::table('orders')
+            ->join('tickets','tickets.id','=','orders.ticket_id')
+            ->join('users','users.id','=','orders.user_id')
+            ->select('orders.*','users.name as User Name','tickets.name as Ticket Name')
+            ->where('orders.qr_code','=',$request->qrCode)
+            ->get();
+    }
+
     /**
      * Show the form for editing the specified resource.
      *
@@ -81,7 +90,8 @@ class OrderController extends Controller
      */
     public function update(Request $request, Order $order)
     {
-        //
+        $order->update($request->all());
+        return response(['success'=>true], 201);
     }
 
     /**

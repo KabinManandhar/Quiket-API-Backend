@@ -20,6 +20,7 @@ class TicketController extends Controller
         $ticket->name=$request->name;
         $ticket->description=$request->description;
         $ticket->price=$request->price;
+        $ticket->total_ticket=$request->total_ticket;
         $ticket->max_ticket_allowed_per_person=$request->max_ticket_allowed_per_person;
         $ticket->min_ticket_allowed_per_person=$request->min_ticket_allowed_per_person;
         $ticket->status=$request->status;

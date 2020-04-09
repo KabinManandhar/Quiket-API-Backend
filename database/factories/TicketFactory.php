@@ -12,6 +12,7 @@ $factory->define(Ticket::class, function (Faker $faker) {
         'name'=>$faker->name,
         'description'=>$faker->paragraph,
         'price'=>$faker->numberBetween(100,1000),
+        'total_ticket'=>$faker->numberBetween(1,100),
         'max_ticket_allowed_per_person'=>$faker->numberBetween(1,10),
         'min_ticket_allowed_per_person'=>$faker->numberBetween(1,10),
         'ticket_type'=>$faker->boolean,

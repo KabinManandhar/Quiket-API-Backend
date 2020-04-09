@@ -41,7 +41,7 @@ class OrganizerController extends Controller
         }
 
         if(Hash::check($credentials['password'],$organizer->password)){
-            $token=OauthAccessToken::whgitere('user_id',$id)->first();
+            $token=OauthAccessToken::where('user_id',$id)->first();
             if($token) {
                 $token->delete();
             }
