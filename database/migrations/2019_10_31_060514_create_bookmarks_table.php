@@ -19,7 +19,6 @@ class CreateBookmarksTable extends Migration
             $table->bigInteger('user_id')->unsigned()->index();
             $table->foreign('event_id')->references('id')->on('events')->onDelete('cascade');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->integer('ratings')->nullable();
             $table->timestamps();
         });
     }

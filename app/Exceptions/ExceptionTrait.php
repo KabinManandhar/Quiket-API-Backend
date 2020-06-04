@@ -9,6 +9,9 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 trait ExceptionTrait
 {
     public function apiException($request, $exception){
+        if($request->expectsJson()){
+
+        }
 
 
 

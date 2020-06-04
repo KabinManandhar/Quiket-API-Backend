@@ -27,7 +27,7 @@ class OrganizerRequest extends FormRequest
             'name'=> 'required',
             'email'=>'required|unique:organizers|email|',
             'password'=>'required',
-            'phone_no'=>'required|max:10',
+            'phone_no'=>'required|max:10|unique:organizers',
             'picture'=>'nullable'
         ];
     }

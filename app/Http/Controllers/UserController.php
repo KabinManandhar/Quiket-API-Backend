@@ -36,7 +36,7 @@ class UserController extends Controller
         if($user){
             if(Hash::check($credentials['password'],$user->password)){
                 $accessToken=$user->createToken($user->name)->accessToken;
-                return response(['success'=>true,'token'=>$accessToken]);
+                return response(['success'=>true,'id'=>$user->id,'token'=>$accessToken]);
             }else{
                 return response(['success'=>false]);
             }
@@ -48,13 +48,13 @@ class UserController extends Controller
      * @return \Illuminate\Http\JsonResponse
      * @throws UnathorizedException
      */
-    public function logout(Organizer $user)
+    public function logout(User $user)
     {
         $this->UserChecker($user);
         $id=$user->id;
         $token=OauthAccessToken::where('user_id',$id)->first();
         $token->delete();
-        return response()->json(['data'=>'Token Deleted']);
+        return response(['success'=>true]);
     }
 
 
@@ -70,21 +70,16 @@ class UserController extends Controller
         $user->email=$request->email;
         $user->password=bcrypt($request->password);
         $picture=$request->picture;
-
         if($picture) {
             $picture = preg_replace('/^data:image\/\w+;base64,/', '', $picture);
             $picture = str_replace(' ', '+', $picture);
-            $pictureName = $user->email .rand(). '.png';
+            $pictureName = date('mdYHis').uniqid(). '.png';
             Storage::disk('public')->put($pictureName, base64_decode($picture));
             $user->picture = $pictureName;
         }
         $user->phone_no=$request->phone_no;
         $user->save();
-        $accessToken=$user->createToken($request->name)->accessToken;
-        return response([
-            'data'=> $user,
-            'access-token'=>$accessToken
-        ],201);
+        return response(['success'=>true]);
     }
 
 
@@ -94,8 +89,17 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-        return $user;
+        $picture=Storage::url(''.$user->picture);
+        return response([
+            'id'=>$user->id,
+            'name' => $user->name,
+            'phone_no' => $user->phone_no,
+            'email' => $user->email,
+            'description' => $user->description,
+            'picture' => $picture,
+           ]);
     }
+
 
 
     /**
@@ -106,28 +110,46 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
     {
+
         $this->UserChecker($user);
         $updatePic=$request->picture;
 //        dd($request);
         if($updatePic) {
             $picture = preg_replace('/^data:image\/\w+;base64,/', '', $updatePic);
             $picture = str_replace(' ', '+', $picture);
-            $pictureName = $user->email .rand() . '.png';
-            Storage::disk('public/')->put($pictureName, base64_decode($picture));
+            $pictureName = date('mdYHis').uniqid(). '.png';
+            Storage::disk('public')->delete($user->picture);
+            Storage::disk('public')->put($pictureName, base64_decode($picture));
             $request->picture = $pictureName;
+            $password=bcrypt($request->password);
             $user->update([
                 'name' => $request->name,
                 'description' => $request->description,
                 'picture' => $request->picture,
                 'email' => $request->email,
                 'phone_no' => $request->phone_no,
-                'password' => bcrypt($request->password)
+                'password' => $password
+            ]);
+        }elseif ($request->password){
+            $password=bcrypt($request->password);
+            $user->update([
+                'name' => $request->name,
+                'description' => $request->description,
+                'picture' => $request->picture,
+                'email' => $request->email,
+                'phone_no' => $request->phone_no,
+                'password' => $password
             ]);
         }else{
-            $user->update($request->all());
+            $user->update([
+                'name' => ($request->name),
+                'description' => $request->description,
+                'email' => $request->email,
+                'phone_no' => $request->phone_no,
+                'password' => bcrypt($request->password)
+            ]);
         }
-        return response([
-            'data'=> $user,
+        return response(['success'=>true,
         ],201);
     }
 

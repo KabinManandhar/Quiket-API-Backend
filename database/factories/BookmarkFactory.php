@@ -12,6 +12,6 @@ $factory->define(Bookmark::class, function (Faker $faker) {
     return [
         'user_id'=> User::all()->pluck('id')->random(),
         'event_id'=> Event::all()->pluck('id')->random(),
-        'ratings'=> $faker->numberBetween(0,5),
+
     ];
 });

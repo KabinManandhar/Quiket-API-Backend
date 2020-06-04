@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Model\Bookmark;
+use App\Model\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class BookmarkController extends Controller
 {
@@ -35,8 +37,39 @@ class BookmarkController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $values=request(['user_id','event_id']);
+        $main=Bookmark::query()->where('user_id',$values['user_id'])->where('event_id',$values['event_id'])->count();
+        if($main==0){
+            $bookmark= new Bookmark();
+            $bookmark->event_id=$request->event_id;
+            $bookmark->user_id=$request->user_id;
+
+
+
+            $bookmark->save();
+            return response(['success'=>true]);
+
+        }
+        else{
+            return response(['success'=>false]);
+        }
+
     }
+
+    public function checkBookmark(Request $request)
+    {
+        $values = request(['user_id', 'event_id']);
+        $main = Bookmark::query()->where('user_id', $values['user_id'])->where('event_id', $values['event_id'])->count();
+        if($main==0){
+            return response(['success'=>true]);
+        }else{
+            return response(['success'=>false]);
+        }
+    }
+    public function getUserBookmark(User $user){
+        return $user->bookmarks->pluck('event_id');
+    }
+
 
     /**
      * Display the specified resource.
@@ -44,9 +77,10 @@ class BookmarkController extends Controller
      * @param  \App\Model\Bookmark  $bookmark
      * @return \Illuminate\Http\Response
      */
-    public function show(Bookmark $bookmark)
+    public function show(Bookmark $bookmark,User $user)
     {
-        //
+
+
     }
 
     /**
@@ -78,8 +112,16 @@ class BookmarkController extends Controller
      * @param  \App\Model\Bookmark  $bookmark
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Bookmark $bookmark)
+    public function destroyId(Request $request){
+        $values = request(['user_id', 'event_id']);
+        $bookmark=Bookmark::query()->where('user_id', $values['user_id'])->where('event_id', $values['event_id'])->pluck('id');
+        $this->destroy($bookmark);
+    }
+    public function destroy($bookmark)
     {
-        //
+       DB::table('bookmarks')->delete($bookmark);
+
+
+
     }
 }

@@ -69,6 +69,7 @@ class EventController extends Controller
      */
     public function show(Event $event)
     {
+
         if($event->picture) {
 //            $type = pathinfo($event->picture, PATHINFO_EXTENSION);
            // $path=Storage::disk('public')->get($event->picture);
@@ -87,7 +88,8 @@ class EventController extends Controller
                 'status' => $event->status,
                 'start_datetime' => $event->start_datetime,
                 'end_datetime' => $event->end_datetime,
-                'organizer_id' => $event->id]);
+                'organizer_id' => $event->organizer_id,
+                'organizer_name'=>Organizer::where('id','=',$event->organizer_id)->pluck('name')->first()]);
         }
         else{
             return $event;
@@ -125,7 +127,6 @@ class EventController extends Controller
                     'venue' => $request->venue,
                     'category' => $request->category,
                     'type' => $request->type,
-                    'status' => $request->status,
                     'start_datetime' => $request->start_datetime,
                     'end_datetime' => $request->end_datetime,
                     'organizer_id' => $organizer->id,

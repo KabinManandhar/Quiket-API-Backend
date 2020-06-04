@@ -38,8 +38,22 @@ class TicketController extends Controller
 
     public function show(Ticket $ticket)
     {
-        return $ticket;
+       // dd($ticket->orders->pluck('id')->count());
+        return response([
+            'id'=>$ticket->id,
+            'name'=>$ticket->name,
+            'description'=>$ticket->description,
+            'price'=>$ticket->price,
+            'total_ticket'=>$ticket->total_ticket,
+            'max_ticket_allowed_per_person'=>$ticket->max_ticket_allowed_per_person,
+            'min_ticket_allowed_per_person'=>$ticket->min_ticket_allowed_per_person,
+            'ticket_type'=>$ticket->ticket_type,
+            'status'=>$ticket->status,
+            'event_id'=>$ticket->event_id,
+            'bought_ticket'=>$ticket->orders->pluck('id')->count()
+            ]);
     }
+
 
     public function showEventTicket(Event $event)
     {

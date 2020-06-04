@@ -26,7 +26,7 @@ class UserRequest extends FormRequest
         return [
             'name'=>'required',
             'email'=>'required|unique:users',
-            'password'=>'required|confirmed',
+            'password'=>'required',
             'phone_no'=>'required',
             'picture'=>'nullable'
         ];

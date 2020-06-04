@@ -84,15 +84,12 @@ class OrganizerController extends Controller
         if($picture) {
             $picture = preg_replace('/^data:image\/\w+;base64,/', '', $picture);
             $picture = str_replace(' ', '+', $picture);
-            $pictureName = $organizer->email.rand() . '.png';
+            $pictureName = date('mdYHis').uniqid(). '.png';
             Storage::disk('public')->put($pictureName, base64_decode($picture));
             $organizer->picture = $pictureName;
         }
         $organizer->save();
-        $accessToken=$organizer->createToken($request->name)->accessToken;
         return response(['success'=>true,
-            'id'=> $organizer->id,
-            'access-token'=>$accessToken
         ],201);
     }
 
@@ -102,7 +99,15 @@ class OrganizerController extends Controller
      */
     public function show(Organizer $organizer)
     {
-        return $organizer;
+        $picture=Storage::url(''.$organizer->picture);
+        return response([
+            'id'=>$organizer->id,
+            'name' => $organizer->name,
+            'phone_no' => $organizer->phone_no,
+            'email' => $organizer->email,
+            'description' => $organizer->description,
+            'picture' => $picture,
+        ]);
     }
 
 
@@ -120,22 +125,34 @@ class OrganizerController extends Controller
         if($updatePic) {
             $picture = preg_replace('/^data:image\/\w+;base64,/', '', $updatePic);
             $picture = str_replace(' ', '+', $picture);
-            $pictureName = $organizer->email.rand() . '.png';
+            $pictureName = date('mdYHis').uniqid(). '.png';
             Storage::disk('public')->put($pictureName, base64_decode($picture));
             $request->picture = $pictureName;
+            $password=bcrypt($request->password);
+
             $organizer->update([
                 'name' => $request->name,
                 'description' => $request->description,
                 'picture' => $request->picture,
                 'email' => $request->email,
                 'phone_no' => $request->phone_no,
-                'password' => bcrypt($request->password)
+                'password' => $password
             ]);
-        }else{
+        }elseif ($request->password){
+            $password=bcrypt($request->password);
+            $organizer->update([
+                'name' => $request->name,
+                'description' => $request->description,
+                'picture' => $request->picture,
+                'email' => $request->email,
+                'phone_no' => $request->phone_no,
+                'password' => $password
+            ]);
+        }
+            else{
             $organizer->update($request->all());
         }
-        return response([
-            'data'=> $organizer,
+        return response(['success'=>true,
         ],201);
     }
 
